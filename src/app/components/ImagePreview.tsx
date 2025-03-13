@@ -13,6 +13,7 @@ interface ImagePreviewProps {
 export default function ImagePreview({
   original,
   converted,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isLoading,
   format,
   quality,
