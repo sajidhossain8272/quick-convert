@@ -1,4 +1,4 @@
 # public/robots.txt
 User-agent: *
 Allow: /
-Sitemap: https://www.quickconvert.com/sitemap.xml
+Sitemap: https://quick-convert-img.vercel.app/sitemap.xml

@@ -108,23 +108,23 @@ export const metadata: Metadata = {
     "best image converter 2028",
     "best image converter 2029",
     "best image converter 2030",
-    
+
   ],
   themeColor: "#ffffff",
   alternates: {
-    canonical: "https://www.quickconvert.com",
+    canonical: "https://quick-convert-img.vercel.app/",
   },
   openGraph: {
     title: "Quick Convert - Fast, Secure, Client-side Image Conversion",
     description:
       "Convert your images quickly and securely in your browser with Quick Convert. No uploads to a server, ensuring privacy and speed.",
-    url: "https://www.quickconvert.com",
+    url: "https://quick-convert-img.vercel.app/",
     siteName: "Quick Convert",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "https://www.quickconvert.com/og-image.jpg", // Replace with your actual OG image URL
+        url: "https://quick-convert-img.vercel.app/og-image.jpg", // Replace with your actual OG image URL
         width: 1200,
         height: 630,
         alt: "Quick Convert - Image Conversion",
@@ -136,10 +136,10 @@ export const metadata: Metadata = {
     title: "Quick Convert - Fast, Secure, Client-side Image Conversion",
     description:
       "Experience fast and secure image conversion directly in your browser with Quick Convert. No server uploads for enhanced privacy.",
-    images: ["https://www.quickconvert.com/og-image.jpg"], // Replace with your actual image URL
+    images: ["https://quick-convert-img.vercel.app/og-image.jpg"], // Replace with your actual image URL
     creator: "@your_twitter_handle", // Replace with your Twitter handle
   },
-  metadataBase: new URL("https://www.quickconvert.com"),
+  metadataBase: new URL("https://quick-convert-img.vercel.app/"),
 };
 
 export default function RootLayout({
@@ -160,7 +160,7 @@ export default function RootLayout({
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Quick Convert",
-            "url": "https://www.quickconvert.com",
+            "url": "https://quick-convert-img.vercel.app/",
             "description":
               "Quick Convert is a client-side image conversion tool that converts images quickly and securely.",
             "applicationCategory": "Utilities",

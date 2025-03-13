@@ -29,7 +29,7 @@ Quick Convert is a lightweight, client-side image conversion tool that allows us
 Clone the repository and install the dependencies:
 
 ```bash
-git clone https://github.com/[your-username]/quick-convert.git
+git clone https://github.com/sajidhossain8272/quick-convert.git
 cd quick-convert
 npm install
 # or if using yarn:
