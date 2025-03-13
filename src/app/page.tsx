@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { FaCheckCircle, FaSpinner, FaHourglass, FaTrash } from "react-icons/fa";
 import Dropzone from "./components/Dropzone";
 import ConversionControls from "./components/ConversionControls";
 import { getBaseName } from "@/lib/imageUtils";
+import Features from "./components/Features";
+import Hero from "./components/Hero";
 
 interface ImageItem {
   id: number;
@@ -25,6 +27,16 @@ export default function Home() {
     resolution: "original" as "original" | "25" | "50" | "75",
   });
 
+  // 1) Create a ref for the main conversion section
+  const mainRef = useRef<HTMLDivElement | null>(null);
+
+  // 2) Function to scroll to the main conversion section
+  const scrollToMain = () => {
+    if (mainRef.current) {
+      mainRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   /**
    * Add images from dropzone.
    */
@@ -40,7 +52,7 @@ export default function Home() {
   };
 
   /**
-   * Toggle selection of an image
+   * Toggle selection of an image.
    */
   const toggleSelectImage = (id: number) => {
     setImages((prev) =>
@@ -51,7 +63,7 @@ export default function Home() {
   };
 
   /**
-   * Remove an image from the list
+   * Remove an image from the list.
    */
   const removeImage = (id: number) => {
     setImages((prev) => prev.filter((img) => img.id !== id));
@@ -64,7 +76,7 @@ export default function Home() {
     const selectedImages = images.filter((img) => img.selected);
     if (selectedImages.length === 0) return;
 
-    // Mark selected images as loading, clear old conversions
+    // Mark selected images as loading and clear old conversions.
     setImages((prev) =>
       prev.map((img) =>
         img.selected
@@ -73,7 +85,7 @@ export default function Home() {
       )
     );
 
-    // Convert each image using a separate Web Worker
+    // Convert each image using a separate Web Worker.
     const convertImage = (image: ImageItem) => {
       return new Promise<ImageItem>((resolve) => {
         const worker = new Worker(
@@ -101,7 +113,7 @@ export default function Home() {
 
     const results = await Promise.all(selectedImages.map(convertImage));
 
-    // Update state for all images with new data for the converted ones
+    // Update state for all images with new data for the converted ones.
     setImages((prev) =>
       prev.map((img) => {
         const updated = results.find((r) => r.id === img.id);
@@ -112,7 +124,7 @@ export default function Home() {
 
   /**
    * Download logic:
-   * - If there is only one *converted* image (and presumably selected), download it directly.
+   * - If there is only one *converted* image, download it directly.
    * - If multiple images, download a ZIP.
    */
   const handleDownloadAll = async () => {
@@ -165,115 +177,128 @@ export default function Home() {
   const hasConverted = images.some((img) => !!img.convertedBase64);
 
   return (
-    <div className='py-8 px-4'>
-      <div className='max-w-5xl mx-auto space-y-8'>
-        {/* Title / Intro */}
-        <div className='text-center space-y-2'>
-          <h1 className='text-3xl md:text-4xl font-bold'>Quick Convert</h1>
-          <p className='text-gray-600'>
-            Convert single or multiple images right in your browser.
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section - pass the scroll function to the Hero component */}
+      <Hero onConvertNowClick={scrollToMain} />
 
-        {/* Conversion Controls */}
-        <ConversionControls
-          settings={conversionSettings}
-          setSettings={setConversionSettings}
-          onConvert={handleConvert}
-          hasSelectedImages={hasSelectedImages}
-          selectedCount={selectedCount}
-        />
+      {/* Main Conversion Tool Section */}
+      <main ref={mainRef} className="max-w-7xl mx-auto py-10 px-4">
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+          <div className="mb-6">
+            <div className="flex items-center space-x-2 text-2xl font-extrabold text-gray-800 tracking-tight pb-1">
+              <span>
+                To <span className="text-blue-600">Convert</span>
+              </span>
+            </div>
+            <p className="text-gray-600">
+              Upload your images, adjust conversion settings, and download your optimized images.
+              Built for speed and simplicity.
+            </p>
+          </div>
 
-        {/* Dropzone */}
-        <Dropzone onDrop={addImages} multiple />
+          {/* Conversion Controls */}
+          <ConversionControls
+            settings={conversionSettings}
+            setSettings={setConversionSettings}
+            onConvert={handleConvert}
+            hasSelectedImages={hasSelectedImages}
+            selectedCount={selectedCount}
+          />
 
-        {/* Table of images */}
-        {images.length > 0 && (
-          <div className='overflow-x-auto border border-gray-200 rounded'>
-            <table className='min-w-full text-left text-sm'>
-              <thead className='bg-gray-50'>
-                <tr>
-                  <th className='p-3 border-b w-12 text-center'>Select</th>
-                  <th className='p-3 border-b'>File Name</th>
-                  <th className='p-3 border-b'>Status</th>
-                  <th className='p-3 border-b'>Converted File Name</th>
-                  <th className='p-3 border-b'>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {images.map((img) => {
-                  const baseName = getBaseName(img.originalFileName);
-                  const ext = conversionSettings.format;
+          {/* Dropzone */}
+          <Dropzone onDrop={addImages} multiple />
 
-                  let statusIcon = <FaHourglass className='text-gray-400' />;
-                  if (img.isLoading) {
-                    statusIcon = (
-                      <FaSpinner className='animate-spin text-blue-600' />
+          {/* Table of Images */}
+          {images.length > 0 && (
+            <div className="overflow-x-auto mt-6 border border-gray-200 rounded">
+              <table className="min-w-full text-left text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="p-3 border-b w-12 text-center">Select</th>
+                    <th className="p-3 border-b">File Name</th>
+                    <th className="p-3 border-b">Status</th>
+                    <th className="p-3 border-b">Converted File Name</th>
+                    <th className="p-3 border-b">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {images.map((img) => {
+                    const baseName = getBaseName(img.originalFileName);
+                    const ext = conversionSettings.format;
+
+                    let statusIcon = <FaHourglass className="text-gray-400" />;
+                    if (img.isLoading) {
+                      statusIcon = (
+                        <FaSpinner className="animate-spin text-blue-600" />
+                      );
+                    } else if (img.convertedBase64) {
+                      statusIcon = <FaCheckCircle className="text-green-500" />;
+                    }
+
+                    return (
+                      <tr key={img.id} className="border-b">
+                        {/* Checkbox */}
+                        <td className="p-3 text-center">
+                          <input
+                            type="checkbox"
+                            checked={img.selected}
+                            onChange={() => toggleSelectImage(img.id)}
+                            className="h-4 w-4"
+                          />
+                        </td>
+                        {/* Original Filename */}
+                        <td className="p-3">{img.originalFileName}</td>
+                        {/* Status */}
+                        <td className="p-3">
+                          <div className="flex items-center gap-2">
+                            {statusIcon}
+                            {!img.isLoading && !img.convertedBase64 && "Pending"}
+                            {img.isLoading && "Converting..."}
+                            {img.convertedBase64 && "Converted"}
+                          </div>
+                        </td>
+                        {/* Converted File Name */}
+                        <td className="p-3">
+                          {img.convertedBase64 ? `${baseName}.${ext}` : "N/A"}
+                        </td>
+                        {/* Actions */}
+                        <td className="p-3">
+                          <button
+                            onClick={() => removeImage(img.id)}
+                            className="text-red-500 hover:text-red-600"
+                          >
+                            <FaTrash />
+                          </button>
+                        </td>
+                      </tr>
                     );
-                  } else if (img.convertedBase64) {
-                    statusIcon = <FaCheckCircle className='text-green-500' />;
-                  }
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
 
-                  return (
-                    <tr key={img.id} className='border-b'>
-                      {/* Checkbox */}
-                      <td className='p-3 text-center'>
-                        <input
-                          type='checkbox'
-                          checked={img.selected}
-                          onChange={() => toggleSelectImage(img.id)}
-                          className='h-4 w-4'
-                        />
-                      </td>
-                      {/* Original Filename */}
-                      <td className='p-3'>{img.originalFileName}</td>
-                      {/* Status icon */}
-                      <td className='p-3'>
-                        <div className='flex items-center gap-2'>
-                          {statusIcon}
-                          {!img.isLoading && !img.convertedBase64 && "Pending"}
-                          {img.isLoading && "Converting..."}
-                          {img.convertedBase64 && "Converted"}
-                        </div>
-                      </td>
-                      {/* Converted File Name */}
-                      <td className='p-3'>
-                        {img.convertedBase64 ? `${baseName}.${ext}` : "N/A"}
-                      </td>
-                      {/* Actions */}
-                      <td className='p-3'>
-                        <button
-                          onClick={() => removeImage(img.id)}
-                          className='text-red-500 hover:text-red-600'
-                        >
-                          <FaTrash />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+          {/* Download Button */}
+          {images.length > 0 && (
+            <div className="mt-4 flex justify-center">
+              <button
+                onClick={handleDownloadAll}
+                disabled={!hasConverted}
+                className={`px-6 py-2 rounded-lg transition-colors text-white ${
+                  hasConverted
+                    ? "bg-green-600 hover:bg-green-700"
+                    : "bg-gray-300 cursor-not-allowed"
+                }`}
+              >
+                Download Converted Images
+              </button>
+            </div>
+          )}
+        </div>
+      </main>
 
-        {/* Download Button */}
-        {images.length > 0 && (
-          <div className='mt-4 flex justify-center'>
-            <button
-              onClick={handleDownloadAll}
-              disabled={!hasConverted}
-              className={`px-6 py-2 rounded-lg transition-colors text-white ${
-                hasConverted
-                  ? "bg-green-600 hover:bg-green-700"
-                  : "bg-gray-300 cursor-not-allowed"
-              }`}
-            >
-              Download Converted Images
-            </button>
-          </div>
-        )}
-      </div>
+      {/* Features Section */}
+      <Features />
     </div>
   );
 }
