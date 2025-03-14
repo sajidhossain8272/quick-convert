@@ -124,7 +124,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://quick-convert-img.vercel.app/og-image.jpg", // Replace with your actual OG image URL
+        url: "https://quick-convert-img.vercel.app/og-image.png", // Replace with your actual OG image URL
         width: 1200,
         height: 630,
         alt: "Quick Convert - Image Conversion",
@@ -136,7 +136,7 @@ export const metadata: Metadata = {
     title: "Quick Convert - Fast, Secure, Client-side Image Conversion",
     description:
       "Experience fast and secure image conversion directly in your browser with Quick Convert. No server uploads for enhanced privacy.",
-    images: ["https://quick-convert-img.vercel.app/og-image.jpg"], // Replace with your actual image URL
+    images: ["https://quick-convert-img.vercel.app/og-image.png"], // Replace with your actual image URL
     creator: "@your_twitter_handle", // Replace with your Twitter handle
   },
   metadataBase: new URL("https://quick-convert-img.vercel.app/"),
