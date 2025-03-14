@@ -63,6 +63,7 @@ const ConversionTable = () => {
             processing power, conversions may take longer. High file size or
             bulk conversions may cause instability, except on high-end devices.
           </li>
+          <li>Our conversion limit is determined by your device&apos;s processing power. That&apos;s why we say there&apos;s no fixed limit—your device sets the pace!</li>
           <li>We currently do not support <span className="font-bold">SVG</span> file format at this time. </li>
         </ul>
       </div>
