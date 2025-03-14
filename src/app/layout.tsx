@@ -7,7 +7,8 @@ import Script from "next/script";
 import { GoogleAnalytics } from "nextjs-google-analytics";
 
 
-
+// 🔹 Hardcoded Google Analytics Measurement ID
+const GA_MEASUREMENT_ID = "G-N7HW0XK7EP"; 
 
 const geistSans = Inter({
   variable: "--font-geist-sans",
@@ -155,6 +156,19 @@ export default function RootLayout({
     <html lang="en">
       <head>
       <GoogleAnalytics gaMeasurementId="G-N7HW0XK7EP" />
+
+      <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
 
         {/* Structured Data for SEO */}
         <Script
