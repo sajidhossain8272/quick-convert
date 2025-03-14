@@ -32,6 +32,4 @@ Clone the repository and install the dependencies:
 git clone https://github.com/sajidhossain8272/quick-convert.git
 cd quick-convert
 npm install
-# or if using yarn:
-# yarn install
 
