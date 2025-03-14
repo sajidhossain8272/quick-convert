@@ -27,23 +27,24 @@ Quick Convert is a fast, secure, and entirely client-side image conversion tool.
 ## Installation
 
 1. **Clone the Repository**
+
    ```bash
    git clone https://github.com/your-username/quick-convert.git
    cd quick-convert
 
-2. **Install**
-   ```bash
-  npm install
-  # or
-  yarn install
+2. **Clone the Repository**
+
+   npm install
+   # or
+   yarn install
 
 3. **Run Locally**
-  ```bash
-  npm run dev
-  # or
-  yarn dev
 
-  
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+
 ## Usage
 
 - **Upload Images**: Drag & drop images or click to select files using the interactive dropzone.
@@ -58,6 +59,5 @@ Contributions are welcome! Feel free to fork the repository and submit pull requ
 ## License
 
 This project is licensed under the MIT License.
-
 
 
