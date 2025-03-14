@@ -115,11 +115,11 @@ const LoadingAnimation = () => {
       ) : (
         <div className="flex flex-col items-center transition-all duration-500 animate-[fadeInScale_0.5s_ease-out]">
           <FaCheckCircle size={60} className="text-green-500 animate-bounce" />
-          <p className="mt-4 text-lg font-bold text-green-600">
+          <p className="mt-4 lg:text-xl text-lg font-bold text-green-600">
             Conversion Completed
           </p>
-          <p className="mt-2 text-sm text-gray-700">
-            That&apos;s how fast our conversion is—try it now!
+          <p className="mt-2 lg:text-lg text-sm text-gray-700">
+            That&apos;s how fast our conversion is—<span className="font-bold ">try it now!</span>
           </p>
         </div>
       )}
