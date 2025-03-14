@@ -9,6 +9,7 @@ import ConversionControls from "./components/ConversionControls";
 import { getBaseName } from "@/lib/imageUtils";
 import Features from "./components/Features";
 import Hero from "./components/Hero";
+import ConversionTable from "./components/ConversionTable";
 
 interface ImageItem {
   id: number;
@@ -271,7 +272,7 @@ export default function Home() {
                       statusText = "Converted";
                     } else {
                       statusIcon = <FaHourglass className="text-gray-400" />;
-                      statusText = "Pending";
+                      statusText = "Ready To Convert";
                     }
 
                     return (
@@ -334,7 +335,7 @@ export default function Home() {
           )}
         </div>
       </main>
-
+      <ConversionTable />
       {/* Features Section */}
       <Features />
     </div>
