@@ -25,7 +25,7 @@ const Features = () => {
         </p>
 
         <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>  
-          {/* Feature 3: Client-Side Conversion */}
+          {/* Feature 1: Client-Side Conversion */}
           <div className='flex flex-col items-center text-center bg-white rounded-lg p-6 shadow transition-transform duration-300 hover:scale-105 hover:shadow-md'>
             <ArrowPathIcon className='h-12 w-12 text-blue-600 mb-4 transition-transform duration-300 hover:scale-105' />
             <h4 className='text-xl font-semibold mb-2'>
@@ -38,7 +38,7 @@ const Features = () => {
             </p>
           </div>
 
-          {/* Feature 4: Bulk Uploads */}
+          {/* Feature 2: Bulk Uploads */}
           <div className='flex flex-col items-center text-center bg-white rounded-lg p-6 shadow transition-transform duration-300 hover:scale-105 hover:shadow-md'>
             <FaUpload className='text-blue-600 text-5xl mb-4 transition-transform duration-300 hover:scale-105' />
             <h4 className='text-xl font-semibold mb-2'>Bulk Uploads</h4>
@@ -48,7 +48,7 @@ const Features = () => {
             </p>
           </div>
 
-          {/* Feature 1: Fast & Efficient */}
+          {/* Feature 3: Fast & Efficient */}
           <div className='flex flex-col items-center text-center bg-white rounded-lg p-6 shadow transition-transform duration-300 hover:scale-105 hover:shadow-md'>
             <FaRocket className='text-blue-600 text-5xl mb-4 transition-transform duration-300 hover:scale-105' />
             <h4 className='text-xl font-semibold mb-2'>Fast &amp; Efficient</h4>
@@ -58,7 +58,7 @@ const Features = () => {
             </p>
           </div>
 
-          {/* Feature 6: Multi-format Support */}
+          {/* Feature 4: Multi-format Support */}
           <div className='flex flex-col items-center text-center bg-white rounded-lg p-6 shadow transition-transform duration-300 hover:scale-105 hover:shadow-md'>
             <FaImages className='text-blue-600 text-5xl mb-4 transition-transform duration-300 hover:scale-105' />
             <h4 className='text-xl font-semibold mb-2'>Multi-format Support</h4>
@@ -80,7 +80,7 @@ const Features = () => {
             </p>
           </div>
 
-          {/* Feature 2: User Friendly */}
+          {/* Feature 6: User Friendly */}
           <div className='flex flex-col items-center text-center bg-white rounded-lg p-6 shadow transition-transform duration-300 hover:scale-105 hover:shadow-md'>
             <FaUser className='text-blue-600 text-5xl mb-4 transition-transform duration-300 hover:scale-105' />
             <h4 className='text-xl font-semibold mb-2'>User Friendly</h4>
