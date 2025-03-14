@@ -34,10 +34,9 @@ Quick Convert is a fast, secure, and entirely client-side image conversion tool.
 
 2. **Install dependencies**
 
-  ```bash
-   npm install
+   # npm install
    # or
-   yarn install
+   # yarn install
 
 3. **Run Locally**
 
