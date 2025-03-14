@@ -15,8 +15,9 @@ interface ImageItem {
   originalBase64: string;
   originalFileName: string;
   convertedBase64?: string;
-  isLoading: boolean;
-  selected: boolean; // For selecting this image to convert
+  isUploading: boolean; // New: shows upload progress
+  isLoading: boolean;   // Shows conversion progress
+  selected: boolean;    // For selecting this image to convert
 }
 
 export default function Home() {
@@ -27,10 +28,10 @@ export default function Home() {
     resolution: "original" as "original" | "25" | "50" | "75",
   });
 
-  // 1) Create a ref for the main conversion section
+  // Create a ref for the main conversion section
   const mainRef = useRef<HTMLDivElement | null>(null);
 
-  // 2) Function to scroll to the main conversion section
+  // Function to scroll to the main conversion section
   const scrollToMain = () => {
     if (mainRef.current) {
       mainRef.current.scrollIntoView({ behavior: "smooth" });
@@ -38,17 +39,50 @@ export default function Home() {
   };
 
   /**
-   * Add images from dropzone.
+   * Add images from dropzone with upload progress.
+   * Each file is added immediately with isUploading true,
+   * and then updated when its processing (and optional HEIC conversion) is complete.
    */
   const addImages = (fileData: { base64: string; fileName: string }[]) => {
-    const newItems = fileData.map((data, idx) => ({
-      id: Date.now() + idx,
-      originalBase64: data.base64,
-      originalFileName: data.fileName,
-      isLoading: false,
-      selected: true, // Default to selected when first added
-    }));
-    setImages((prev) => [...prev, ...newItems]);
+    fileData.forEach(async (data, idx) => {
+      const id = Date.now() + idx;
+      // Immediately add a placeholder image with isUploading true
+      setImages((prev) => [
+        ...prev,
+        {
+          id,
+          originalBase64: "",
+          originalFileName: data.fileName,
+          isUploading: true,
+          isLoading: false,
+          selected: true,
+        },
+      ]);
+
+      let base64 = data.base64;
+
+      // If the file is HEIC/HEIF, convert it first
+      if (data.fileName.endsWith(".heic") || data.fileName.endsWith(".heif")) {
+        const response = await fetch(data.base64);
+        const blob = await response.blob();
+        const heic2any = (await import("heic2any")).default;
+        const convertedBlob = await heic2any({ blob, toType: "image/jpeg" });
+        base64 = await new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.readAsDataURL(convertedBlob as Blob);
+        });
+      }
+
+      // Update the image with the processed base64 and mark uploading as complete
+      setImages((prev) =>
+        prev.map((img) =>
+          img.id === id
+            ? { ...img, originalBase64: base64, isUploading: false }
+            : img
+        )
+      );
+    });
   };
 
   /**
@@ -70,62 +104,56 @@ export default function Home() {
   };
 
   /**
-   * Convert selected images.
+   * Convert selected images and update status individually.
+   * Each image conversion is handled in its own Web Worker.
    */
   const handleConvert = async () => {
-    const selectedImages = images.filter((img) => img.selected);
+    const selectedImages = images.filter(
+      (img) => img.selected && !img.isUploading
+    );
     if (selectedImages.length === 0) return;
 
-    // Mark selected images as loading and clear old conversions.
+    // Mark selected images as loading and clear old conversion data.
     setImages((prev) =>
       prev.map((img) =>
-        img.selected
+        img.selected && !img.isUploading
           ? { ...img, isLoading: true, convertedBase64: undefined }
           : img
       )
     );
 
-    // Convert each image using a separate Web Worker.
-    const convertImage = (image: ImageItem) => {
-      return new Promise<ImageItem>((resolve) => {
-        const worker = new Worker(
-          new URL("@/lib/convertWorker", import.meta.url)
-        );
+    // Process each selected image individually.
+    selectedImages.forEach((image) => {
+      const worker = new Worker(
+        new URL("@/lib/convertWorker", import.meta.url)
+      );
 
-        worker.postMessage({
-          dataUrl: image.originalBase64,
-          format: conversionSettings.format,
-          quality: conversionSettings.quality,
-          resolution: conversionSettings.resolution,
-        });
-
-        worker.onmessage = (e) => {
-          const { converted } = e.data;
-          resolve({
-            ...image,
-            convertedBase64: converted,
-            isLoading: false,
-          });
-          worker.terminate();
-        };
+      worker.postMessage({
+        dataUrl: image.originalBase64,
+        format: conversionSettings.format,
+        quality: conversionSettings.quality,
+        resolution: conversionSettings.resolution,
       });
-    };
 
-    const results = await Promise.all(selectedImages.map(convertImage));
-
-    // Update state for all images with new data for the converted ones.
-    setImages((prev) =>
-      prev.map((img) => {
-        const updated = results.find((r) => r.id === img.id);
-        return updated ? updated : img;
-      })
-    );
+      worker.onmessage = (e) => {
+        const { converted } = e.data;
+        // Update the image with the conversion result
+        setImages((prev) =>
+          prev.map((img) =>
+            img.id === image.id
+              ? { ...img, convertedBase64: converted, isLoading: false }
+              : img
+          )
+        );
+        worker.terminate();
+      };
+    });
   };
 
   /**
    * Download logic:
-   * - If there is only one *converted* image, download it directly.
-   * - If multiple images, download a ZIP.
+   * - If only one converted image exists, download it directly.
+   * - If multiple images are converted, pack them in a ZIP.
    */
   const handleDownloadAll = async () => {
     const convertedItems = images.filter((img) => img.convertedBase64);
@@ -143,7 +171,7 @@ export default function Home() {
       return;
     }
 
-    // Otherwise, build a ZIP
+    // Otherwise, build a ZIP archive
     const zip = new JSZip();
     convertedItems.forEach((item) => {
       const base64Data = item.convertedBase64!.split(",")[1];
@@ -178,9 +206,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section - pass the scroll function to the Hero component */}
+      {/* Hero Section */}
       <Hero onConvertNowClick={scrollToMain} />
-
 
       {/* Main Conversion Tool Section */}
       <main ref={mainRef} className="max-w-7xl mx-auto py-10 px-4">
@@ -227,13 +254,24 @@ export default function Home() {
                     const baseName = getBaseName(img.originalFileName);
                     const ext = conversionSettings.format;
 
-                    let statusIcon = <FaHourglass className="text-gray-400" />;
-                    if (img.isLoading) {
+                    let statusIcon;
+                    let statusText;
+                    if (img.isUploading) {
+                      statusIcon = (
+                        <FaSpinner className="animate-spin text-orange-500" />
+                      );
+                      statusText = "Uploading...";
+                    } else if (img.isLoading) {
                       statusIcon = (
                         <FaSpinner className="animate-spin text-blue-600" />
                       );
+                      statusText = "Converting...";
                     } else if (img.convertedBase64) {
                       statusIcon = <FaCheckCircle className="text-green-500" />;
+                      statusText = "Converted";
+                    } else {
+                      statusIcon = <FaHourglass className="text-gray-400" />;
+                      statusText = "Pending";
                     }
 
                     return (
@@ -245,6 +283,7 @@ export default function Home() {
                             checked={img.selected}
                             onChange={() => toggleSelectImage(img.id)}
                             className="h-4 w-4"
+                            disabled={img.isUploading || img.isLoading}
                           />
                         </td>
                         {/* Original Filename */}
@@ -253,9 +292,7 @@ export default function Home() {
                         <td className="p-3">
                           <div className="flex items-center gap-2">
                             {statusIcon}
-                            {!img.isLoading && !img.convertedBase64 && "Pending"}
-                            {img.isLoading && "Converting..."}
-                            {img.convertedBase64 && "Converted"}
+                            <span>{statusText}</span>
                           </div>
                         </td>
                         {/* Converted File Name */}

@@ -11,7 +11,9 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "file-saver": "^2.0.5",
+    "heic2any": "^0.0.4",
     "jszip": "^3.10.1",
+    "libheif-js": "^1.18.2",
     "next": "15.2.2",
     "next-sitemap": "^4.2.3",
     "nextjs-google-analytics": "^2.3.7",

@@ -16,7 +16,7 @@ export default function Dropzone({ onDrop, multiple = false }: DropzoneProps) {
         (file) =>
           new Promise<{ base64: string; fileName: string }>((resolve, reject) => {
             // Validate that it's an image
-            if (!file.type.startsWith("image/")) {
+            if (!file.type.startsWith("image/") && !file.type.startsWith("image/heic") && !file.type.startsWith("image/heif")) {
               reject(new Error("Invalid file type. Please upload an image."));
               return;
             }
@@ -40,7 +40,7 @@ export default function Dropzone({ onDrop, multiple = false }: DropzoneProps) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: onDropCallback,
-    accept: { "image/*": [] },
+    accept: { "image/*": [], "image/heic": [], "image/heif": [] },
     multiple,
   });
 
