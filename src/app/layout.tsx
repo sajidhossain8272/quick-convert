@@ -7,7 +7,7 @@ import Script from "next/script";
 
 
 // 🔹 Hardcoded Google Analytics Measurement ID
-const GA_MEASUREMENT_ID = "G-N7HW0XK7EP"; 
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 const geistSans = Inter({
   variable: "--font-geist-sans",
