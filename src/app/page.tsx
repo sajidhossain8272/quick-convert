@@ -181,6 +181,7 @@ export default function Home() {
       {/* Hero Section - pass the scroll function to the Hero component */}
       <Hero onConvertNowClick={scrollToMain} />
 
+
       {/* Main Conversion Tool Section */}
       <main ref={mainRef} className="max-w-7xl mx-auto py-10 px-4">
         <div className="bg-white p-6 rounded-lg shadow-lg">

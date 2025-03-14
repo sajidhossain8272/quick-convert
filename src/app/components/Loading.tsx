@@ -1,32 +1,41 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
-import { FaSpinner, FaCheckCircle } from "react-icons/fa";
+import { FaSpinner, FaCheckCircle, FaBolt } from "react-icons/fa";
 
 const confettiColors = ["#FFC700", "#FF0000", "#2E3192", "#41BBC7", "#7ED321"];
 
-const generateConfettiItems = (count = 20) => {
-  return Array.from({ length: count }).map((_, index) => {
-    const left = Math.floor(Math.random() * 100); // percentage across container width
-    const delay = Math.random() * 0.5; // seconds
-    const background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
-    const size = Math.floor(Math.random() * 5) + 6; // random size between 6px and 10px
-    const drift = Math.floor(Math.random() * 20) - 10; // horizontal drift between -10px and 10px
-    return { left, delay, background, size, drift, id: index };
-  });
+interface ConfettiItem {
+  left: number;
+  delay: number;
+  background: string;
+  size: number;
+  drift: number;
+  id: number;
+}
+
+const generateConfettiItems = (count = 30): ConfettiItem[] => {
+  return Array.from({ length: count }).map((_, index) => ({
+    left: Math.floor(Math.random() * 100),
+    delay: Math.random() * 0.5,
+    background:
+      confettiColors[Math.floor(Math.random() * confettiColors.length)],
+    size: Math.floor(Math.random() * 6) + 8,
+    drift: Math.floor(Math.random() * 30) - 15,
+    id: index,
+  }));
 };
 
-const LoadingAnimation = () => {
+const LoadingAnimation: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
-  const [confettiItems, setConfettiItems] = useState<
-    { left: number; delay: number; background: string; size: number; drift: number; id: number }[]
-  >([]);
+  const [confettiItems, setConfettiItems] = useState<ConfettiItem[]>([]);
 
   useEffect(() => {
-    // Phase 1: Progress normally from 0% to 25% over 2 seconds
-    const normalDuration = 2000; 
-    const blinkFinishDuration = 100; 
-    const intervalTime = 30; 
-    const targetProgress = 25; 
+    const normalDuration = 1800;
+    const finishBlinkDuration = 100;
+    const intervalTime = 20;
+    const targetProgress = 35;
     const increment = targetProgress / (normalDuration / intervalTime);
 
     const interval = setInterval(() => {
@@ -40,13 +49,12 @@ const LoadingAnimation = () => {
       });
     }, intervalTime);
 
-    // Phase 2: After normal progress, jump instantly to 100% and complete
     const timerNormal = setTimeout(() => {
       setProgress(100);
       setTimeout(() => {
         setIsLoading(false);
-        setConfettiItems(generateConfettiItems(25)); // generate confetti on completion
-      }, blinkFinishDuration);
+        setConfettiItems(generateConfettiItems());
+      }, finishBlinkDuration);
     }, normalDuration);
 
     return () => {
@@ -57,89 +65,91 @@ const LoadingAnimation = () => {
 
   return (
     <div
-      className="
-        relative 
-        flex 
-        flex-col 
-        items-center 
-        justify-center 
-        bg-white
-        shadow-2xl
-        p-6 
-        rounded-xl 
-        border 
-        border-gray-200 
-        overflow-hidden 
-        animate-fadeIn
-        w-[calc(100%-2rem)] // 100% width - 2rem padding
-        max-w-[calc(100%-2rem)] // max-width: 100%-2rem
-        h-80
-        m-0
-      "
-      style={{ minWidth: "320px" }} // optional to ensure a minimum width
+      className='
+    relative 
+    flex 
+    flex-col 
+    items-center 
+    justify-center 
+    bg-white
+    shadow-2xl
+    p-6 
+    rounded-xl 
+    border 
+    border-gray-200 
+    overflow-hidden 
+    animate-fadeIn
+    w-[calc(100%-2rem)] // 100% width - 2rem padding
+    max-w-[calc(100%-2rem)] // max-width: 100%-2rem
+    h-80
+    m-0
+  '
     >
-      {/* Inline CSS for keyframes */}
       <style>{`
         @keyframes confettiFall {
-          0% { 
-            transform: translateY(-20px) translateX(calc(var(--drift) * -1)) rotate(0deg); 
-            opacity: 1; 
-          }
-          100% { 
-            transform: translateY(150px) translateX(var(--drift)) rotate(360deg); 
-            opacity: 0; 
-          }
+          0% { opacity: 1; transform: translateY(-50px) translateX(calc(var(--drift) * -1)) rotate(0deg); }
+          100% { opacity: 0; transform: translateY(200px) translateX(var(--drift)) rotate(720deg); }
         }
         @keyframes fadeInScale {
           0% { opacity: 0; transform: scale(0.8); }
           100% { opacity: 1; transform: scale(1); }
         }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: scale(0.95); }
-          to { opacity: 1; transform: scale(1); }
+        @keyframes gradientMove {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
       `}</style>
 
+      <div className='absolute inset-0 bg-gradient-to-r from-blue-100 via-purple-100 to-blue-100 opacity-60 animate-[gradientMove_5s_ease_infinite]'></div>
+
       {isLoading ? (
-        <div className="flex flex-col items-center w-full">
-          <FaSpinner size={60} className="text-blue-600 animate-spin" />
-          <p className="mt-4 text-lg text-blue-600 animate-pulse">Converting...</p>
-          {/* Enhanced Progress Bar */}
-          <div className="w-full bg-gray-200 rounded-full h-2.5 mt-4">
+        <div className='relative flex flex-col items-center space-y-4 w-full'>
+          <FaSpinner size={64} className='text-indigo-500 animate-spin' />
+          <div className='text-center space-y-1'>
+            <h2 className='text-xl font-semibold text-indigo-600 animate-pulse flex items-center justify-center gap-2'>
+              <FaBolt className='text-yellow-400' />
+              Blazing Fast Conversion!
+            </h2>
+            <p className='text-sm text-gray-500'>
+              Hold tight, your image is converting at lightspeed...
+            </p>
+          </div>
+
+          <div className='w-full h-3 rounded-full bg-gray-200 overflow-hidden'>
             <div
-              className="bg-gradient-to-r from-blue-400 to-blue-600 h-2.5 rounded-full"
+              className='h-full bg-gradient-to-r from-indigo-500 to-blue-400 transition-all duration-200'
               style={{ width: `${progress}%` }}
-            ></div>
+            />
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center transition-all duration-500 animate-[fadeInScale_0.5s_ease-out]">
-          <FaCheckCircle size={60} className="text-green-500 animate-bounce" />
-          <p className="mt-4 lg:text-xl text-lg font-bold text-green-600">
-            Conversion Completed
-          </p>
-          <p className="mt-2 lg:text-lg text-sm text-gray-700">
-            That&apos;s how fast our conversion is—<span className="font-bold ">try it now!</span>
+        <div className='relative flex flex-col items-center space-y-4 animate-[fadeInScale_0.6s_ease-out]'>
+          <FaCheckCircle size={70} className='text-green-500 animate-bounce' />
+          <h2 className='text-2xl font-bold text-green-600'>
+            Conversion Completed!
+          </h2>
+          <p className='text-gray-600 text-center'>
+            That’s how fast our conversion is—
+            <span className='font-bold text-indigo-500'>try it now!</span>
           </p>
         </div>
       )}
 
-      {/* Confetti Burst */}
       {!isLoading &&
         confettiItems.map((item) => (
           <div
             key={item.id}
-            className="absolute top-0"
+            className='absolute top-0'
             style={{
               left: `${item.left}%`,
               width: `${item.size}px`,
               height: `${item.size}px`,
               background: item.background,
               borderRadius: "50%",
-              animation: `confettiFall 1.5s ease-out ${item.delay}s forwards`,
-              // Pass the drift value via a CSS variable for horizontal movement
-              "--drift": `${item.drift}px`,
-            } as React.CSSProperties}
+              animation: `confettiFall 1.8s cubic-bezier(0.25, 1, 0.5, 1) ${item.delay}s forwards`,
+              ["--drift" as string]: `${item.drift}px`,
+            }}
           />
         ))}
     </div>

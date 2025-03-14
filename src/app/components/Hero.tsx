@@ -24,7 +24,7 @@ const Hero: React.FC<HeroProps> = ({ onConvertNowClick }) => {
               className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold shadow-lg hover:bg-gray-200 transition transform hover:scale-105"
               onClick={onConvertNowClick}
             >
-              Convert Now
+              Try Now
             </button>
           </div>
           <div className="md:w-1/2 mt-10 md:mt-0 lg:pl-20 flex justify-center items-center">
