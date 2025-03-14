@@ -4,6 +4,10 @@ import "./globals.css";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Script from "next/script";
+import { GoogleAnalytics } from "nextjs-google-analytics";
+
+
+
 
 const geistSans = Inter({
   variable: "--font-geist-sans",
@@ -150,6 +154,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+      <GoogleAnalytics gaMeasurementId="G-N7HW0XK7EP" />
+
         {/* Structured Data for SEO */}
         <Script
           id="structured-data"
