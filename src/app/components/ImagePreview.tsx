@@ -1,5 +1,6 @@
 'use client';
 import { saveAs } from 'file-saver';
+import Image from 'next/image';
 
 interface ImagePreviewProps {
   original: string | null;
@@ -51,11 +52,11 @@ export default function ImagePreview({
         <div className="flex flex-col md:flex-row md:space-x-4">
           <div className="flex flex-col items-center">
             <h2 className="text-xl font-bold mb-2">Before</h2>
-            <img src={original} alt="Before" className="max-w-full rounded" />
+            <Image src={original} alt="Before" className="max-w-full rounded" />
           </div>
           <div className="flex flex-col items-center">
             <h2 className="text-xl font-bold mb-2">After</h2>
-            <img src={converted} alt="After" className="max-w-full rounded" />
+            <Image src={converted} alt="After" className="max-w-full rounded" />
             <div className="flex justify-center mt-4">
               <button
                 onClick={handleDownload}
@@ -70,7 +71,7 @@ export default function ImagePreview({
         original && (
           <div>
             <h2 className="text-xl font-bold mb-2">Preview</h2>
-            <img src={original} alt="Preview" className="max-w-full rounded" />
+            <Image src={original} alt="Preview" className="max-w-full rounded" />
           </div>
         )
       )}
