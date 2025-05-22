@@ -5,31 +5,45 @@ import { AiCaptionGenerator } from '../components/AiCaptionGenerator';
 import AltTextLoadingAnimation from '../components/AltTextLoadingAnimation';
 
 export default function Page() {
+  // Scroll handler for the CTA
+  const scrollToGenerator = () => {
+    const el = document.getElementById('generator-section');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const steps = [
+    'Drag & drop (or click) to upload your image.',
+    'Our AI (powered by Google Gemini Vision) analyzes it.',
+    'Receive a concise, descriptive caption to use as alt-text.',
+  ];
+
   return (
     <main className="bg-gradient-to-b from-blue-50 to-white">
-      
       {/* Hero */}
       <section className="py-20 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
-          
           {/* Text Column */}
-          <div className="flex-1 text-center md:text-left">
-            <h1 className="text-5xl font-extrabold text-white mb-4">
+          <div className="flex-1 text-center md:text-left space-y-4">
+            <h1 className="text-5xl font-extrabold text-white pt-20">
               AI-Powered Alt-Text Generator in Seconds
             </h1>
-            <p className="text-lg text-blue-100 mb-6">
-              Instantly create concise, SEO-friendly alt-tags for any image. No signup required — just upload and go.
+            <p className="text-lg text-gray-50">
+              Create concise, SEO-friendly alt-tags for any image—no signup required.
             </p>
-            <p className="text-sm text-blue-100 italic">
-              Captions are free to use anywhere.
+            <p className="text-sm text-gray-200 italic">
+              Supports JPG, PNG, WebP, HEIC & more.
             </p>
+            <button
+              onClick={scrollToGenerator}
+              className="mt-4 inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg shadow-lg hover:bg-gray-100 transition"
+            >
+              Try Now
+            </button>
           </div>
-
           {/* Loader Column */}
           <div className="flex-1">
             <AltTextLoadingAnimation />
           </div>
-
         </div>
       </section>
 
@@ -40,14 +54,16 @@ export default function Page() {
             How It Works
           </h2>
           <div className="grid gap-8 md:grid-cols-3">
-            {[
-              'Drag & drop (or click) to upload your image.',
-              'Our AI (powered by Google Gemini Vision) analyzes it.',
-              'Receive a concise, descriptive caption to use as alt-text.',
-            ].map((step, i) => (
-              <div key={i} className="flex flex-col items-center space-y-4">
-                <div className="h-12 w-12 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 font-semibold">
-                  {i + 1}
+            {steps.map((step, idx) => (
+              <div
+                key={idx}
+                className="group flex flex-col items-center p-6 bg-white rounded-lg shadow-lg
+                           hover:shadow-2xl transform hover:-translate-y-1 transition"
+              >
+                <div className="flex items-center justify-center h-14 w-14
+                                bg-gradient-to-tr from-blue-400 to-purple-500
+                                text-white rounded-full text-xl font-bold mb-4">
+                  {idx + 1}
                 </div>
                 <p className="text-gray-700 text-center">{step}</p>
               </div>
@@ -57,20 +73,14 @@ export default function Page() {
       </section>
 
       {/* Generator */}
-      <section className="py-16 bg-gradient-to-br from-white to-blue-50">
+      <section
+        id="generator-section"
+        className="py-16 bg-gradient-to-br from-white to-blue-50"
+      >
         <div className="max-w-3xl mx-auto px-4">
           <div className="bg-white shadow-xl rounded-2xl p-8">
             <AiCaptionGenerator />
           </div>
-        </div>
-      </section>
-
-      {/* Footer Note */}
-      <section className="py-8">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <p className="text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} QuickConvert. Captions are free to use anywhere.
-          </p>
         </div>
       </section>
     </main>

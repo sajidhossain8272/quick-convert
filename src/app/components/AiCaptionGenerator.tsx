@@ -12,8 +12,9 @@ import { PhotoIcon } from '@heroicons/react/24/outline';
 import { FaCopy, FaCheck } from 'react-icons/fa';
 
 export const AiCaptionGenerator: React.FC = () => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const resultRef    = useRef<HTMLDivElement>(null);
+  const fileInputRef   = useRef<HTMLInputElement>(null);
+  const resultRef      = useRef<HTMLDivElement>(null);
+  const captionRef     = useRef<HTMLParagraphElement>(null);
 
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
   const [caption, setCaption]       = useState<string>('');
@@ -21,12 +22,19 @@ export const AiCaptionGenerator: React.FC = () => {
   const [dragActive, setDragActive] = useState<boolean>(false);
   const [isCopied, setIsCopied]     = useState<boolean>(false);
 
-  // Scroll result area into view on upload or when loading starts
+  // Scroll result box into view when loading starts
   useEffect(() => {
-    if ((isLoading || previewSrc) && resultRef.current) {
+    if (isLoading && resultRef.current) {
       resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  }, [isLoading, previewSrc]);
+  }, [isLoading]);
+
+  // Scroll down to the caption when it's ready
+  useEffect(() => {
+    if (!isLoading && caption && captionRef.current) {
+      captionRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [caption, isLoading]);
 
   // reset copy state after 2s
   useEffect(() => {
@@ -77,80 +85,81 @@ export const AiCaptionGenerator: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Drop Zone */}
-      <div
-        className={`relative flex flex-col items-center justify-center p-8 border-2 rounded-lg transition-colors
-          ${dragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white hover:border-gray-400 hover:bg-gray-50'}
-          ${isLoading ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}
-        `}
-        onClick={() => !isLoading && fileInputRef.current?.click()}
-        onDragOver={onDragOver}
-        onDragLeave={onDragLeave}
-        onDrop={onDrop}
-      >
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          onChange={onFileChange}
-          className="hidden"
-          disabled={isLoading}
-        />
-        <PhotoIcon className="h-12 w-12 text-gray-400" />
-        <span className="mt-2 text-gray-600 text-center">
-          {dragActive
-            ? 'Drop image here…'
-            : 'Drag & drop an image here, or click to select'}
-        </span>
-      </div>
-
-      {/* Result Area */}
-      {(isLoading || previewSrc) && (
+    // <<<–– this wrapper makes everything centered vertically + horizontally
+    <div className="flex flex-col items-center justify-center max-h-screen bg-gray-50 p-4">
+      <div className="space-y-6 w-full max-w-md">
+        {/* Drop Zone */}
         <div
-          ref={resultRef}
-          className="mx-auto max-w-md bg-white shadow-lg rounded-xl overflow-hidden"
+          className={`relative flex flex-col items-center justify-center p-8 border-2 rounded-lg bg-white transition-colors
+            ${dragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'}
+            ${isLoading ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}
+          `}
+          onClick={() => !isLoading && fileInputRef.current?.click()}
+          onDragOver={onDragOver}
+          onDragLeave={onDragLeave}
+          onDrop={onDrop}
         >
-          {/* Spinner */}
-          {isLoading && (
-            <div className="flex flex-col items-center p-8 space-y-4">
-              <svg
-                className="w-10 h-10 animate-spin text-blue-600"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v8H4z"
-                />
-              </svg>
-              <p className="text-gray-600">Generating alt-text…</p>
-            </div>
-          )}
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={onFileChange}
+            className="hidden"
+            disabled={isLoading}
+          />
+          <PhotoIcon className="h-12 w-12 text-gray-400" />
+          <span className="mt-2 text-gray-600 text-center">
+            {dragActive
+              ? 'Drop image here…'
+              : 'Drag & drop an image here, or click to select'}
+          </span>
+        </div>
 
-          {/* Preview + Caption Card */}
-          {!isLoading && previewSrc && (
-            <div className="p-6 space-y-4">
-              <img
-                src={previewSrc}
-                alt={caption || 'Preview'}
-                className="w-full rounded-lg shadow-md"
-              />
-              <div className="relative bg-gray-50 p-4 rounded-md border border-gray-200">
-                <p className="text-gray-700 italic">{caption}</p>
+        {/* Result Area */}
+        {(isLoading || previewSrc) && (
+          <div
+            ref={resultRef}
+            className="bg-white shadow-lg rounded-xl overflow-hidden"
+          >
+            {/* Spinner */}
+            {isLoading && (
+              <div className="flex flex-col items-center p-8 space-y-4">
+                <svg
+                  className="w-10 h-10 animate-spin text-blue-600"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  />
+                </svg>
+                <p className="text-gray-600">Generating alt-text…</p>
+              </div>
+            )}
+
+            {/* Caption Card */}
+            {!isLoading && caption && (
+              <div className="relative p-4 bg-gray-50 border-t border-b border-gray-200">
+                <p
+                  ref={captionRef}
+                  className="text-gray-700 italic pr-10"
+                >
+                  {caption}
+                </p>
                 <button
                   onClick={copyCaption}
-                  className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                  className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
                   aria-label="Copy caption"
                 >
                   {isCopied ? (
@@ -159,16 +168,20 @@ export const AiCaptionGenerator: React.FC = () => {
                     <FaCopy className="w-5 h-5" />
                   )}
                 </button>
-                {isCopied && (
-                  <span className="absolute bottom-2 right-3 text-xs text-green-600">
-                    Copied!
-                  </span>
-                )}
               </div>
-            </div>
-          )}
-        </div>
-      )}
+            )}
+
+            {/* Image Preview */}
+            {!isLoading && previewSrc && (
+              <img
+                src={previewSrc}
+                alt={caption || 'Preview'}
+                className="w-full rounded-b-lg"
+              />
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
