@@ -11,7 +11,7 @@ const USDT_ADDRESSES = {
 } as const;
 
 type UsdtNetwork = keyof typeof USDT_ADDRESSES;
-type Method = "PayPal" | "Bitcoin" | "Ethereum" | "USDT" ;
+type Method = "PayPal" | "Bitcoin" | "Ethereum" | "USDT";
 
 /* ---------- Icons (inline SVGs for zero deps) ---------- */
 const Icon = {
@@ -47,22 +47,6 @@ const Icon = {
       />
     </svg>
   ),
-  bkash: (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox='0 0 24 24' aria-hidden {...props}>
-      <path
-        fill='currentColor'
-        d='M12 2c5.5 0 10 3.6 10 8.1 0 2.8-1.8 5.2-4.6 6.7L18 22l-3.6-2c-.8.2-1.5.3-2.4.3C6.5 20.3 2 16.7 2 12.1 2 5.6 6.5 2 12 2Z'
-      />
-    </svg>
-  ),
-  nagad: (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox='0 0 24 24' aria-hidden {...props}>
-      <path
-        fill='currentColor'
-        d='M12 2 4 6v12l8 4 8-4V6l-8-4Zm0 3.2 5 2.5v8.6l-5 2.5-5-2.5V7.7l5-2.5Z'
-      />
-    </svg>
-  ),
   copy: (props: React.SVGProps<SVGSVGElement>) => (
     <svg
       width='14'
@@ -89,7 +73,7 @@ const Icon = {
 /* ---------- Toast ---------- */
 const Toast = ({ message }: { message: string }) => (
   <>
-    {/* tiny CSS for animation; respects reduced motion (see below) */}
+    {/* tiny CSS for animation; respects reduced motion */}
     <style>{`
       @keyframes toastIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
       @keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(8px); } }
@@ -165,32 +149,38 @@ const CryptoWarning = () => (
 );
 
 const Donation: React.FC = () => {
-  const [method, setMethod] = useState<Method>(() => {
-    const saved = localStorage.getItem("donation-method") as Method | null;
-    return saved ?? "PayPal";
-  });
+  const [method, setMethod] = useState<Method>("PayPal"); // SSR-safe default
   const [usdtNet, setUsdtNet] = useState<UsdtNetwork>("TRC20");
   const [toast, setToast] = useState<{ msg: string; leaving?: boolean } | null>(
     null
   );
 
-  // Persist last selected method
+  // Load saved method only in the browser
   useEffect(() => {
-    localStorage.setItem("donation-method", method);
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("donation-method") as Method | null;
+      if (saved) setMethod(saved);
+    }
+  }, []);
+
+  // Persist selected method only in the browser
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("donation-method", method);
+    }
   }, [method]);
 
   const showToast = (msg: string) => {
-    // enter
-    setToast({ msg });
-    // schedule leave
+    setToast({ msg }); // enter
     const t = setTimeout(() => {
-      setToast({ msg, leaving: true });
+      setToast({ msg, leaving: true }); // leave
       setTimeout(() => setToast(null), 210);
     }, 1800);
     return () => clearTimeout(t);
   };
 
   const handleCopy = (text: string, label: string) => {
+    // Only runs on user interaction (client)
     navigator.clipboard
       .writeText(text)
       .then(() => showToast(`${label} copied`));
@@ -281,10 +271,6 @@ const Donation: React.FC = () => {
               </p>
             </>
           )}
-
- 
-
-    
 
           {method === "Bitcoin" && (
             <>
