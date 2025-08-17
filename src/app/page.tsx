@@ -339,7 +339,7 @@ export default function Home() {
       <ConversionTable />
       {/* Features Section */}
       <Features />
-      <Donation />
+      {/* <Donation /> */}
     </div>
   );
 }
