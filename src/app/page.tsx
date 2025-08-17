@@ -10,7 +10,6 @@ import { getBaseName } from "@/lib/imageUtils";
 import Features from "./components/Features";
 import Hero from "./components/Hero";
 import ConversionTable from "./components/ConversionTable";
-import Donation from "./components/Donation";
 
 interface ImageItem {
   id: number;
