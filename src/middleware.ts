@@ -6,7 +6,7 @@ const APP_HOSTS = new Set([
   "www.quickconvert.plzwork.app",
 ]);
 
-// Hosts that should show the blank white "Coming Soon" placeholder.
+// Hosts that should show the "Coming Soon" placeholder with migration links.
 const COMING_SOON_HOSTS = new Set(["plzwork.app", "www.plzwork.app"]);
 
 // Legacy deployment domain that previously hosted the app.
@@ -39,6 +39,7 @@ const COMING_SOON_HTML = `<!doctype html>
         justify-content: center;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       }
+      main { padding: 0 1.5rem; text-align: center; }
       h1 {
         color: #111111;
         font-size: clamp(1.5rem, 4vw, 2.5rem);
@@ -47,10 +48,29 @@ const COMING_SOON_HTML = `<!doctype html>
         text-align: center;
         margin: 0;
       }
+      p {
+        color: #6b7280;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin: 1.25rem 0 0;
+      }
+      a {
+        color: #42b719;
+        font-weight: 500;
+        text-decoration: none;
+      }
+      a:hover {
+        color: #2f9e14;
+        text-decoration: underline;
+      }
     </style>
   </head>
   <body>
-    <h1>Coming Soon</h1>
+    <main>
+      <h1>Coming Soon</h1>
+      <p>This project was migrated to <a href="https://quickconvert.plzwork.app">quickconvert.plzwork.app</a>.</p>
+      <p><a href="https://quickconvert.plzwork.app">View the old plzwork here</a></p>
+    </main>
   </body>
 </html>`;
 
@@ -71,7 +91,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 308);
   }
 
-  // Main domain -> blank white "Coming Soon" placeholder.
+  // Main domain -> "Coming Soon" placeholder with migration links.
   if (COMING_SOON_HOSTS.has(hostname)) {
     return new NextResponse(COMING_SOON_HTML, {
       status: 200,
