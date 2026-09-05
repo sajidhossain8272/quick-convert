@@ -131,11 +131,11 @@ export const metadata: Metadata = {
     canonical: "https://quickconvert.plzwork.app/",
   },
   openGraph: {
-    title: "Plzwork - Tools That Actually Work",
+    title: "Quick Convert - Fast, Secure & Private Image Converter",
     description:
-      "Explore Plzwork products for design, development, AI, productivity, and file conversion.",
+      "Quick Convert is a fast, private, universal conversion engine — convert images, units, currencies, and developer utilities directly in your browser.",
     url: "https://quickconvert.plzwork.app/",
-    siteName: "Plzwork",
+    siteName: "Quick Convert",
     locale: "en_US",
     type: "website",
     images: [
@@ -143,15 +143,15 @@ export const metadata: Metadata = {
         url: "https://quickconvert.plzwork.app/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Plzwork products",
+        alt: "Quick Convert products",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Plzwork - Tools That Actually Work",
+    title: "Quick Convert - Fast, Secure & Private Image Converter",
     description:
-      "Useful tools for design, development, AI workflows, productivity, and file conversion.",
+      "Quick Convert is a fast, private, universal conversion engine — convert images, units, currencies, and developer utilities directly in your browser.",
     images: ["https://quickconvert.plzwork.app/og-image.png"],
     creator: "@your_twitter_handle", // Replace with your Twitter handle
   },
@@ -170,7 +170,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-     <meta name="apple-mobile-web-app-title" content="Plzwork" />
+     <meta name="apple-mobile-web-app-title" content="Quick Convert" />
 
 
       <Script

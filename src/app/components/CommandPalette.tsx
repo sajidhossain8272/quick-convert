@@ -187,7 +187,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             <span><kbd className="px-1.5 py-0.5 bg-gray-800 rounded border border-gray-700 text-gray-300">↵</kbd> Select</span>
             <span><kbd className="px-1.5 py-0.5 bg-gray-800 rounded border border-gray-700 text-gray-300">ESC</kbd> Close</span>
           </div>
-          <span className="text-[11px] font-mono text-[#42b719]">Plzwork Quick Convert V2</span>
+          <span className="text-[11px] font-mono text-[#42b719]">Quick Convert V2</span>
         </div>
       </div>
     </div>

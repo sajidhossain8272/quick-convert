@@ -44,8 +44,8 @@ export default function NavBar({ onOpenCommandPalette, onOpenHistory }: NavBarPr
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-lg font-bold tracking-tight text-[#0d161c]">Plzwork</span>
-                  <span className="text-[10px] font-semibold text-[#42b719] tracking-wider uppercase">Quick Convert</span>
+                  <span className="text-lg font-bold tracking-tight text-[#0d161c]">Quick Convert</span>
+                  <span className="text-[10px] font-semibold text-[#42b719] tracking-wider uppercase">Universal Converter</span>
                 </div>
               </Link>
             </div>

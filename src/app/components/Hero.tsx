@@ -20,7 +20,7 @@ const Hero: React.FC<HeroProps> = ({ onConvertNowClick, onOpenCommandPalette }) 
           <div className="space-y-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-[#d6ded2] bg-white px-4 py-2 text-xs font-semibold text-[#30404a] shadow-2xs">
               <span className="h-2 w-2 rounded-full bg-[#42b719]" />
-              Plzwork · Private Browser Image Studio
+              Quick Convert · Private Browser Image Studio
             </div>
 
             <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-[#0d161c] sm:text-5xl lg:text-6xl">

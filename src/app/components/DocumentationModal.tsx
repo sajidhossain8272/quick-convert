@@ -90,7 +90,7 @@ export const DocumentationModal: React.FC<DocumentationModalProps> = ({ isOpen, 
         <div className="p-6 flex-1 overflow-y-auto space-y-6 text-sm text-gray-300">
           {activeTab === "overview" && (
             <div className="space-y-4">
-              <h4 className="text-lg font-bold text-white">Welcome to Quick Convert by Plzwork</h4>
+              <h4 className="text-lg font-bold text-white">Welcome to Quick Convert</h4>
               <p className="leading-relaxed">
                 Quick Convert is a desktop-grade, privacy-first image conversion engine running 100% inside your browser. Utilizing HTML5 <code className="bg-gray-800 px-1 py-0.5 rounded text-green-400 font-mono">OffscreenCanvas</code> and multi-threaded Web Workers, image processing is executed directly on your device with instant live re-conversion.
               </p>
@@ -191,7 +191,7 @@ export const DocumentationModal: React.FC<DocumentationModalProps> = ({ isOpen, 
 
         {/* Footer */}
         <div className="px-6 py-3.5 bg-[#141f27] border-t border-gray-800 flex justify-between items-center text-xs text-gray-400">
-          <span className="font-mono text-[#42b719]">Plzwork Quick Convert Platform</span>
+          <span className="font-mono text-[#42b719]">Quick Convert Platform</span>
           <button
             onClick={onClose}
             className="px-5 py-2 bg-[#42b719] hover:bg-[#349814] text-white text-xs font-semibold rounded-xl transition"

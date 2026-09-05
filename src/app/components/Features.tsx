@@ -12,7 +12,7 @@ const Features = () => {
     <section className='relative bg-[#f7f7f4] py-16'>
       <div className='max-w-7xl mx-auto px-4'>
         <h3 className='text-3xl font-semibold text-center text-[#0d161c] mb-2'>
-          Why Choose Quick Convert by Plzwork?
+          Why Choose Quick Convert?
         </h3>
         <p className='text-center text-[#5f6c74] mb-10'>
           Experience hassle-free image conversion that&apos;s fast, secure, and
