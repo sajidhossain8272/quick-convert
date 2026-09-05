@@ -103,6 +103,20 @@ export const myPlugin: ConverterPlugin = {
 
 ---
 
+## 🌐 Deployment & Domains
+
+The app routes by hostname at the edge (see [`src/middleware.ts`](src/middleware.ts)):
+
+| Host | Serves |
+| --- | --- |
+| `quickconvert.plzwork.app` | Quick Convert app (this app) |
+| `plzwork.app` / `www.plzwork.app` | Blank white **Coming Soon** placeholder |
+| `quick-convert-img.vercel.app` (legacy) | 308 redirect → `quickconvert.plzwork.app` |
+
+Any other host (e.g. Vercel preview deployments) serves the Quick Convert app.
+
+---
+
 ## 📄 License
 
 Licensed under the MIT License. Built with ❤️ by **Plzwork**.

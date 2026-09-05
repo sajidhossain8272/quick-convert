@@ -128,19 +128,19 @@ export const metadata: Metadata = {
     "convert images to pdf",
   ],
   alternates: {
-    canonical: "https://quick-convert-img.vercel.app/",
+    canonical: "https://quickconvert.plzwork.app/",
   },
   openGraph: {
     title: "Plzwork - Tools That Actually Work",
     description:
       "Explore Plzwork products for design, development, AI, productivity, and file conversion.",
-    url: "https://quick-convert-img.vercel.app/",
+    url: "https://quickconvert.plzwork.app/",
     siteName: "Plzwork",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "https://quick-convert-img.vercel.app/og-image.png", // Replace with your actual OG image URL
+        url: "https://quickconvert.plzwork.app/og-image.png",
         width: 1200,
         height: 630,
         alt: "Plzwork products",
@@ -152,10 +152,10 @@ export const metadata: Metadata = {
     title: "Plzwork - Tools That Actually Work",
     description:
       "Useful tools for design, development, AI workflows, productivity, and file conversion.",
-    images: ["https://quick-convert-img.vercel.app/og-image.png"], // Replace with your actual image URL
+    images: ["https://quickconvert.plzwork.app/og-image.png"],
     creator: "@your_twitter_handle", // Replace with your Twitter handle
   },
-  metadataBase: new URL("https://quick-convert-img.vercel.app/"),
+  metadataBase: new URL("https://quickconvert.plzwork.app/"),
 };
 
 export const viewport: Viewport = {
@@ -196,7 +196,7 @@ export default function RootLayout({
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "Plzwork",
-            "url": "https://quick-convert-img.vercel.app/",
+            "url": "https://quickconvert.plzwork.app/",
             "description":
               "Plzwork builds useful products including Quick Convert, a client-side image conversion tool.",
           })}
