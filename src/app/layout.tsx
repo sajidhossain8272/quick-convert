@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import NavBar from "./components/NavBar";
-import Footer from "./components/Footer";
+import AppChrome from "./components/AppChrome";
 import Script from "next/script";
 
 
@@ -203,9 +202,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${geistSans.variable} antialiased`}>
-        <NavBar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+        <AppChrome>{children}</AppChrome>
       </body>
     </html>
   );

@@ -6,6 +6,12 @@ const APP_HOSTS = new Set([
   "www.quickconvert.plzwork.app",
 ]);
 
+// Hosts that serve the Plzwork Challenge platform.
+const CHALLENGE_HOSTS = new Set([
+  "challenge.plzwork.app",
+  "www.challenge.plzwork.app",
+]);
+
 // Hosts that should show the "Coming Soon" placeholder with migration links.
 const COMING_SOON_HOSTS = new Set(["plzwork.app", "www.plzwork.app"]);
 
@@ -79,6 +85,22 @@ export function middleware(request: NextRequest) {
 
   // Quick Convert app lives only on the subdomain.
   if (APP_HOSTS.has(hostname)) {
+    return NextResponse.next();
+  }
+
+  // Challenge platform subdomain: rewrite unprefixed paths onto /challenge/*.
+  if (CHALLENGE_HOSTS.has(hostname)) {
+    const p = request.nextUrl.pathname;
+    const alreadyPrefixed =
+      p === "/challenge" ||
+      p.startsWith("/challenge/") ||
+      p.startsWith("/verify") ||
+      p.startsWith("/api/");
+    if (!alreadyPrefixed) {
+      const url = request.nextUrl.clone();
+      url.pathname = p === "/" ? "/challenge" : `/challenge${p}`;
+      return NextResponse.rewrite(url);
+    }
     return NextResponse.next();
   }
 
