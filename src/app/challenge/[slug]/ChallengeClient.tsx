@@ -239,7 +239,7 @@ export default function ChallengeClient({ challenge }: { challenge: ChallengeMet
           <div className="border-b border-[#dde4da] px-4 py-2 text-xs font-semibold text-[#5f6c74]">
             Live preview
           </div>
-          <iframe title="Preview" sandbox="" srcDoc={code} className="h-64 w-full bg-white" />
+          <iframe title="Preview" sandbox="allow-scripts" srcDoc={code} className="h-64 w-full bg-white" />
         </div>
       )}
 

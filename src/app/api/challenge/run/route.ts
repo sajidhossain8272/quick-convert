@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "slug and code are required" }, { status: 400 });
   }
 
-  const feedback = runOnly(slug, code.slice(0, MAX_CODE_LENGTH));
+  const feedback = await runOnly(slug, code.slice(0, MAX_CODE_LENGTH));
   if (!feedback) {
     return NextResponse.json(
       { error: "Run is preview-only for this challenge" },
